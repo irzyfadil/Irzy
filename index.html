@@ -1,177 +1,986 @@
 <!DOCTYPE html>
-<html>
-
+<html lang="id">
 <head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Portofolio Irzy</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --blue-900:#1E3A8A;
+    --blue-700:#1D4ED8;
+    --blue-600:#2563EB;
+    --blue-300:#93C5FD;
+    --blue-100:#DBEAFE;
+    --blue-50:#EFF6FF;
+    --white:#FFFFFF;
+    --slate-700:#334155;
+    --slate-500:#64748B;
+    --slate-100:#F8FAFC;
+    --radius-lg:20px;
+    --radius-md:14px;
+    --shadow:0 10px 30px -12px rgba(37,99,235,0.25);
+  }
 
-<title>Portfolio Irzy</title>
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    font-family:'Inter', sans-serif;
+    color:var(--slate-700);
+    background:var(--white);
+    overflow-x:hidden;
+  }
+  h1,h2,h3{
+    font-family:'Poppins', sans-serif;
+    color:var(--blue-900);
+    margin:0;
+  }
+  .mono{ font-family:'IBM Plex Mono', monospace; }
 
-<link rel="stylesheet" href="style.css">
+  button{ font-family:'Inter', sans-serif; cursor:pointer; }
+  a{ color:inherit; }
 
+  :focus-visible{
+    outline:3px solid var(--blue-300);
+    outline-offset:2px;
+    border-radius:6px;
+  }
+
+  /* ================= SPLASH ================= */
+  .splash{
+    position:fixed; inset:0;
+    display:flex; align-items:center; justify-content:center;
+    flex-direction:column; text-align:center;
+    background:linear-gradient(145deg, var(--blue-900), var(--blue-600) 70%);
+    color:var(--white);
+    z-index:1000;
+    cursor:pointer;
+    transition:opacity .6s ease;
+    padding:24px;
+  }
+  .splash.fade-out{ opacity:0; pointer-events:none; }
+  .splash-paw{
+    font-size:48px;
+    margin-bottom:18px;
+    animation:floaty 2.6s ease-in-out infinite;
+  }
+  @keyframes floaty{
+    0%,100%{ transform:translateY(0) rotate(-4deg); }
+    50%{ transform:translateY(-10px) rotate(4deg); }
+  }
+  .splash h1{
+    color:var(--white);
+    font-size:clamp(28px, 6vw, 44px);
+    line-height:1.25;
+    max-width:600px;
+  }
+  .splash h1 span{
+    display:inline-block;
+    background:var(--white);
+    color:var(--blue-700);
+    padding:2px 14px;
+    border-radius:10px;
+    margin-top:6px;
+  }
+  .splash p{
+    margin-top:18px;
+    font-size:15px;
+    letter-spacing:.5px;
+    color:var(--blue-100);
+  }
+  .splash .tap-hint{
+    margin-top:30px;
+    padding:10px 22px;
+    border:1.5px solid rgba(255,255,255,.6);
+    border-radius:999px;
+    font-size:13px;
+    animation:pulseRing 2s ease-in-out infinite;
+  }
+  @keyframes pulseRing{
+    0%,100%{ box-shadow:0 0 0 0 rgba(255,255,255,.25); }
+    50%{ box-shadow:0 0 0 8px rgba(255,255,255,0); }
+  }
+
+  /* ================= APP SHELL ================= */
+  .app{ min-height:100vh; }
+  .app.hidden{ display:none; }
+
+  .topbar{
+    position:sticky; top:0; z-index:50;
+    display:flex; align-items:center; justify-content:space-between;
+    padding:16px clamp(20px,5vw,60px);
+    background:rgba(255,255,255,.85);
+    backdrop-filter:blur(8px);
+    border-bottom:1px solid var(--blue-100);
+  }
+  .brand{
+    font-family:'Poppins', sans-serif;
+    font-weight:700;
+    font-size:20px;
+    color:var(--blue-900);
+    letter-spacing:.5px;
+  }
+  .brand span{ color:var(--blue-600); }
+  .topbar nav button{
+    background:none; border:none;
+    color:var(--blue-700);
+    font-weight:600; font-size:14px;
+    padding:8px 14px; border-radius:999px;
+  }
+  .topbar nav button:hover{ background:var(--blue-50); }
+
+  main{ max-width:1000px; margin:0 auto; padding:clamp(24px,5vw,48px); }
+
+  .view{ display:none; }
+  .view.active{ display:block; animation:viewIn .45s ease; }
+  @keyframes viewIn{
+    from{ opacity:0; transform:translateY(10px); }
+    to{ opacity:1; transform:translateY(0); }
+  }
+
+  /* ---- Home ---- */
+  .hero{ text-align:left; margin-bottom:40px; }
+  .hero .eyebrow{
+    display:inline-block;
+    font-size:12px; font-weight:600; letter-spacing:1.5px;
+    color:var(--blue-600); text-transform:uppercase;
+    background:var(--blue-50);
+    padding:6px 12px; border-radius:999px;
+    margin-bottom:14px;
+  }
+  .hero h1{ font-size:clamp(30px,5vw,42px); }
+  .hero p{ color:var(--slate-500); max-width:560px; margin-top:12px; font-size:15.5px; line-height:1.6; }
+
+  .grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit, minmax(230px,1fr));
+    gap:18px;
+  }
+  .card{
+    border:1.5px solid var(--blue-100);
+    border-radius:var(--radius-lg);
+    padding:24px;
+    background:var(--white);
+    text-align:left;
+    transition:transform .25s ease, box-shadow .25s ease, border-color .25s ease;
+    display:flex; flex-direction:column; gap:10px;
+  }
+  .card:hover{
+    transform:translateY(-4px);
+    box-shadow:var(--shadow);
+    border-color:var(--blue-300);
+  }
+  .card .icon{
+    width:46px; height:46px;
+    display:flex; align-items:center; justify-content:center;
+    background:var(--blue-50);
+    border-radius:12px;
+    font-size:22px;
+  }
+  .card h3{ font-size:17px; }
+  .card p{ font-size:13.5px; color:var(--slate-500); line-height:1.5; margin:0; }
+  .card .go{
+    margin-top:auto;
+    font-size:13px; font-weight:600; color:var(--blue-700);
+    display:flex; align-items:center; gap:4px;
+  }
+
+  /* ---- Project pages shared ---- */
+  .project-page{ background:var(--blue-50); border-radius:24px; padding:clamp(20px,4vw,36px); }
+  .back-btn{
+    background:var(--white); border:1.5px solid var(--blue-100);
+    color:var(--blue-700); font-weight:600; font-size:13.5px;
+    padding:8px 16px; border-radius:999px; margin-bottom:20px;
+    display:inline-flex; align-items:center; gap:6px;
+  }
+  .back-btn:hover{ border-color:var(--blue-300); }
+  .project-title{ display:flex; align-items:center; gap:12px; margin-bottom:6px; }
+  .project-title .icon{
+    width:42px; height:42px; border-radius:12px;
+    background:var(--blue-600); color:var(--white);
+    display:flex; align-items:center; justify-content:center; font-size:20px;
+  }
+  .project-desc{ color:var(--slate-500); font-size:14px; margin:8px 0 26px; }
+
+  .panel{
+    background:var(--white); border-radius:var(--radius-md);
+    padding:clamp(18px,3vw,28px);
+    border:1px solid var(--blue-100);
+  }
+
+  /* ================= CALCULATOR ================= */
+  .calc{ max-width:340px; margin:0 auto; }
+  .calc-screen{
+    background:var(--blue-900);
+    color:var(--white);
+    border-radius:14px;
+    padding:22px 18px;
+    text-align:right;
+    font-family:'IBM Plex Mono', monospace;
+    margin-bottom:16px;
+  }
+  .calc-screen .prev{ font-size:13px; color:var(--blue-300); min-height:16px; }
+  .calc-screen .curr{ font-size:32px; word-break:break-all; }
+  .calc-grid{ display:grid; grid-template-columns:repeat(4,1fr); gap:10px; }
+  .calc-grid button{
+    border:none; border-radius:12px;
+    padding:16px 0; font-size:17px; font-weight:600;
+    background:var(--blue-50); color:var(--blue-900);
+  }
+  .calc-grid button:hover{ background:var(--blue-100); }
+  .calc-grid button.op{ background:var(--blue-100); color:var(--blue-700); }
+  .calc-grid button.op:hover{ background:var(--blue-300); color:var(--white); }
+  .calc-grid button.eq{ background:var(--blue-600); color:var(--white); grid-row:span 1; }
+  .calc-grid button.eq:hover{ background:var(--blue-700); }
+  .calc-grid button.zero{ grid-column:span 2; }
+  .calc-grid button.clear{ background:#FEE2E2; color:#B91C1C; }
+  .calc-grid button.clear:hover{ background:#FECACA; }
+
+  /* ================= CHATBOT ================= */
+  .chat-wrap{ max-width:460px; margin:0 auto; }
+  .chat-window{
+    height:360px; overflow-y:auto;
+    display:flex; flex-direction:column; gap:10px;
+    padding:6px 4px 10px;
+  }
+  .msg{ max-width:80%; padding:10px 14px; border-radius:16px; font-size:14px; line-height:1.45; }
+  .msg.bot{ align-self:flex-start; background:var(--blue-50); color:var(--blue-900); border-bottom-left-radius:4px; }
+  .msg.user{ align-self:flex-end; background:var(--blue-600); color:var(--white); border-bottom-right-radius:4px; }
+  .msg.typing{ display:flex; gap:4px; align-items:center; }
+  .msg.typing span{ width:6px; height:6px; border-radius:50%; background:var(--blue-300); animation:typingDot 1s infinite; }
+  .msg.typing span:nth-child(2){ animation-delay:.15s; }
+  .msg.typing span:nth-child(3){ animation-delay:.3s; }
+  @keyframes typingDot{ 0%,60%,100%{ opacity:.3; transform:translateY(0); } 30%{ opacity:1; transform:translateY(-3px); } }
+
+  .chips{ display:flex; flex-wrap:wrap; gap:8px; margin:10px 0 14px; }
+  .chip{
+    background:var(--blue-50); border:1px solid var(--blue-100);
+    color:var(--blue-700); font-size:12.5px;
+    padding:6px 12px; border-radius:999px; border-width:1px;
+  }
+  .chip:hover{ background:var(--blue-100); }
+
+  .chat-input-row{ display:flex; gap:8px; border-top:1px solid var(--blue-100); padding-top:14px; }
+  .chat-input-row input{
+    flex:1; border:1.5px solid var(--blue-100); border-radius:999px;
+    padding:10px 16px; font-size:14px; font-family:inherit;
+  }
+  .chat-input-row input:focus{ border-color:var(--blue-300); outline:none; }
+  .chat-input-row button{
+    background:var(--blue-600); color:var(--white); border:none;
+    width:42px; height:42px; border-radius:50%; font-size:16px; flex-shrink:0;
+  }
+  .chat-input-row button:hover{ background:var(--blue-700); }
+
+  /* ================= MINIGAME (TIC TAC TOE) ================= */
+  .game-wrap{ max-width:340px; margin:0 auto; text-align:center; }
+  .game-status{ font-weight:600; color:var(--blue-700); margin-bottom:14px; min-height:22px; }
+  .ttt-board{
+    display:grid; grid-template-columns:repeat(3,1fr); gap:10px;
+    margin-bottom:18px;
+  }
+  .ttt-cell{
+    aspect-ratio:1; border:none; border-radius:14px;
+    background:var(--blue-50);
+    font-family:'Poppins', sans-serif; font-size:30px; font-weight:700;
+    color:var(--blue-700); display:flex; align-items:center; justify-content:center;
+  }
+  .ttt-cell:hover:not(:disabled){ background:var(--blue-100); }
+  .ttt-cell:disabled{ cursor:default; }
+  .ttt-cell.o{ color:var(--blue-900); }
+  .reset-btn{
+    background:var(--blue-600); color:var(--white); border:none;
+    padding:10px 22px; border-radius:999px; font-weight:600; font-size:13.5px;
+  }
+  .reset-btn:hover{ background:var(--blue-700); }
+  .game-note{ font-size:12.5px; color:var(--slate-500); margin-top:14px; }
+
+  /* ================= DATA ANALYST ================= */
+  .data-grid{ display:grid; gap:20px; }
+  textarea#dataInput{
+    width:100%; min-height:70px; border:1.5px solid var(--blue-100);
+    border-radius:12px; padding:12px; font-family:'IBM Plex Mono', monospace;
+    font-size:13.5px; resize:vertical;
+  }
+  textarea#dataInput:focus{ outline:none; border-color:var(--blue-300); }
+  .analyze-btn{
+    background:var(--blue-600); color:var(--white); border:none;
+    padding:11px 22px; border-radius:999px; font-weight:600; font-size:13.5px;
+    margin-top:12px;
+  }
+  .analyze-btn:hover{ background:var(--blue-700); }
+  .stat-row{ display:grid; grid-template-columns:repeat(auto-fit,minmax(110px,1fr)); gap:10px; margin-top:8px; }
+  .stat-box{
+    background:var(--blue-50); border-radius:12px; padding:14px;
+    text-align:center;
+  }
+  .stat-box .v{ font-family:'IBM Plex Mono', monospace; font-size:18px; color:var(--blue-900); font-weight:600; }
+  .stat-box .l{ font-size:11px; color:var(--slate-500); margin-top:4px; text-transform:uppercase; letter-spacing:.5px; }
+  canvas#dataChart{ width:100%; height:240px; display:block; }
+
+  footer{
+    text-align:center; padding:30px 20px 110px;
+    font-size:12.5px; color:var(--slate-500);
+  }
+
+  /* ================= CAT ================= */
+  .cat-wrapper{
+    position:fixed; right:14px; bottom:0;
+    width:120px; height:130px;
+    z-index:900; pointer-events:none;
+  }
+  .cat{ position:relative; width:100%; height:100%; animation:catBob 3.2s ease-in-out infinite; }
+  @keyframes catBob{ 0%,100%{ transform:translateY(0); } 50%{ transform:translateY(-5px); } }
+
+  .cat-tail{
+    position:absolute; bottom:18px; left:-2px;
+    width:13px; height:62px; background:var(--white);
+    border:3px solid var(--blue-600); border-radius:50px;
+    transform-origin:bottom center;
+    animation:tailSwish 2.3s ease-in-out infinite;
+  }
+  @keyframes tailSwish{ 0%,100%{ transform:rotate(-18deg); } 50%{ transform:rotate(22deg); } }
+
+  .cat-body{
+    position:absolute; bottom:0; left:18px;
+    width:80px; height:66px;
+    background:var(--white); border:3px solid var(--blue-600);
+    border-radius:50% 50% 38% 38%;
+  }
+
+  .cat-paw{
+    position:absolute; bottom:-2px; width:16px; height:14px;
+    background:var(--white); border:3px solid var(--blue-600); border-radius:40%;
+  }
+  .cat-paw.l{ left:24px; } .cat-paw.r{ left:62px; }
+
+  .cat-head{
+    position:absolute; top:4px; left:30px;
+    width:58px; height:52px;
+    background:var(--white); border:3px solid var(--blue-600); border-radius:50%;
+  }
+  .cat-ear{
+    position:absolute; top:-12px; width:0; height:0;
+    border-left:10px solid transparent; border-right:10px solid transparent;
+    border-bottom:20px solid var(--blue-600);
+  }
+  .cat-ear.l{ left:4px; transform:rotate(-18deg); }
+  .cat-ear.r{ right:4px; transform:rotate(18deg); }
+  .cat-ear::after{
+    content:""; position:absolute; left:50%; bottom:2px;
+    transform:translateX(-50%);
+    width:0; height:0;
+    border-left:5px solid transparent; border-right:5px solid transparent;
+    border-bottom:11px solid var(--blue-100);
+  }
+
+  .cat-eye{
+    position:absolute; width:6px; height:8px; background:var(--blue-900);
+    border-radius:50%; top:20px;
+    animation:catBlink 4.5s infinite;
+  }
+  .cat-eye.l{ left:13px; } .cat-eye.r{ left:34px; }
+  @keyframes catBlink{ 0%,90%,100%{ transform:scaleY(1); } 95%{ transform:scaleY(.1); } }
+
+  .cat-nose{
+    position:absolute; top:30px; left:26px;
+    width:0; height:0;
+    border-left:4px solid transparent; border-right:4px solid transparent;
+    border-top:5px solid var(--blue-300);
+  }
+
+  .cat-whisker{
+    position:absolute; width:18px; height:1.5px; background:var(--blue-300);
+    top:29px;
+  }
+  .cat-whisker.l1{ left:-12px; transform:rotate(-6deg); }
+  .cat-whisker.l2{ left:-12px; top:33px; }
+  .cat-whisker.r1{ left:52px; transform:rotate(6deg); }
+  .cat-whisker.r2{ left:52px; top:33px; }
+
+  .cat-bubble{
+    position:absolute; top:-14px; right:6px;
+    background:var(--blue-900); color:var(--white);
+    font-size:11px; font-family:'Poppins',sans-serif; font-weight:600;
+    padding:5px 10px; border-radius:10px;
+    opacity:0; transition:opacity .4s ease;
+    white-space:nowrap;
+  }
+  .cat-bubble.show{ opacity:1; }
+
+  @media (max-width:480px){
+    .cat-wrapper{ width:90px; height:100px; right:6px; }
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    *, *::before, *::after{
+      animation-duration:.001ms !important;
+      animation-iteration-count:1 !important;
+      transition-duration:.001ms !important;
+    }
+  }
+</style>
 </head>
-
-
 <body>
 
-
-<div class="background"></div>
-
-
-<!-- HALAMAN AWAL -->
-
-<section id="welcome">
-
-<h1>Selamat Datang</h1>
-
-<h2>Ke Portfolio Irzy</h2>
-
-<p>
-Future Programmer | AI Enthusiast | Technology Explorer
-</p>
-
-
-<button onclick="masuk()">
-Ketuk Untuk Masuk
-</button>
-
-
-</section>
-
-
-
-<!-- MENU UTAMA -->
-
-<section id="menu" class="hidden">
-
-
-<h1>Portfolio Irzy</h1>
-
-
-<div class="box" onclick="showProject()">
-
-<h2>Project Saya</h2>
-
-<p>
-Lihat karya dan eksperimen programming saya
-</p>
-
-</div>
-
-
-
-</section>
-
-
-
-
-
-<!-- PROJECT -->
-
-<section id="project" class="hidden">
-
-
-<h1>Project Programming</h1>
-
-
-<div class="card">
-
-<h2>Kalkulator Sederhana</h2>
-
-<input id="angka1" placeholder="Angka 1">
-
-<input id="angka2" placeholder="Angka 2">
-
-
-<button onclick="hitung()">
-Tambah
-</button>
-
-
-<p id="hasil"></p>
-
-</div>
-
-
-
-
-<div class="card">
-
-<h2>Chat Bot Simple</h2>
-
-<input id="chat" placeholder="Tanya sesuatu">
-
-
-<button onclick="bot()">
-Kirim
-</button>
-
-
-<p id="jawaban"></p>
-
-</div>
-
-
-
-
-
-
-<div class="card">
-
-<h2>Mini Game</h2>
-
-<p>
-Tebak angka 1-10
-</p>
-
-<input id="tebakan">
-
-
-<button onclick="game()">
-Main
-</button>
-
-
-<p id="score"></p>
-
-</div>
-
-
-
-
-
-
-
-<div class="card">
-
-
-<h2>Data Analis Dasar</h2>
-
-
-<p>
-Jumlah data: 5,10,15,20
-</p>
-
-
-<button onclick="analisis()">
-Analisis
-</button>
-
-
-<p id="data"></p>
-
-
-
-</div>
-
-
-
-</section>
-
-
-
-<script src="script.js"></script>
-
-
+  <!-- ============ SPLASH ============ -->
+  <div id="splash" class="splash">
+    <div class="splash-paw">🐾</div>
+    <h1>Selamat datang di portofolio<br><span>Irzy</span></h1>
+    <p>Kumpulan proyek kecil, dibuat satu per satu.</p>
+    <div class="tap-hint">Ketuk di mana saja untuk masuk</div>
+  </div>
+
+  <!-- ============ APP ============ -->
+  <div id="app" class="app hidden">
+    <header class="topbar">
+      <div class="brand">IRZY<span>.dev</span></div>
+      <nav><button data-view="home">Beranda</button></nav>
+    </header>
+
+    <main>
+
+      <!-- HOME -->
+      <section id="home" class="view active">
+        <div class="hero">
+          <span class="eyebrow">Portofolio Digital</span>
+          <h1>Halo, saya Irzy 👋</h1>
+          <p>Ini adalah ruang kecil tempat saya mengumpulkan proyek-proyek belajar saya. Pilih salah satu kartu di bawah untuk mencoba langsung di browser kamu.</p>
+        </div>
+
+        <div class="grid">
+          <button class="card" data-view="view-calculator">
+            <div class="icon">🧮</div>
+            <h3>Kalkulator Sederhana</h3>
+            <p>Operasi hitung dasar: tambah, kurang, kali, dan bagi.</p>
+            <span class="go">Buka proyek →</span>
+          </button>
+
+          <button class="card" data-view="view-chatbot">
+            <div class="icon">💬</div>
+            <h3>Chat Bot Simple</h3>
+            <p>Bot percakapan ringan berbasis pola kata kunci.</p>
+            <span class="go">Buka proyek →</span>
+          </button>
+
+          <button class="card" data-view="view-game">
+            <div class="icon">🎮</div>
+            <h3>Minigame</h3>
+            <p>Tic-Tac-Toe melawan komputer yang cukup susah dikalahkan.</p>
+            <span class="go">Buka proyek →</span>
+          </button>
+
+          <button class="card" data-view="view-data">
+            <div class="icon">📊</div>
+            <h3>Data Analis Dasar</h3>
+            <p>Masukkan deretan angka, lihat statistik dan grafiknya.</p>
+            <span class="go">Buka proyek →</span>
+          </button>
+        </div>
+      </section>
+
+      <!-- ===== PROJECT: CALCULATOR ===== -->
+      <section id="view-calculator" class="view">
+        <div class="project-page">
+          <button class="back-btn" data-view="home">← Kembali</button>
+          <div class="project-title">
+            <div class="icon">🧮</div>
+            <h2>Kalkulator Sederhana</h2>
+          </div>
+          <p class="project-desc">Kalkulator dasar untuk operasi tambah, kurang, kali, dan bagi.</p>
+
+          <div class="panel">
+            <div class="calc">
+              <div class="calc-screen">
+                <div class="prev mono" id="calcPrev">&nbsp;</div>
+                <div class="curr mono" id="calcCurr">0</div>
+              </div>
+              <div class="calc-grid">
+                <button class="clear" data-act="ac">AC</button>
+                <button class="op" data-act="sign">±</button>
+                <button class="op" data-act="percent">%</button>
+                <button class="op" data-op="÷">÷</button>
+
+                <button data-num="7">7</button>
+                <button data-num="8">8</button>
+                <button data-num="9">9</button>
+                <button class="op" data-op="×">×</button>
+
+                <button data-num="4">4</button>
+                <button data-num="5">5</button>
+                <button data-num="6">6</button>
+                <button class="op" data-op="−">−</button>
+
+                <button data-num="1">1</button>
+                <button data-num="2">2</button>
+                <button data-num="3">3</button>
+                <button class="op" data-op="+">+</button>
+
+                <button class="zero" data-num="0">0</button>
+                <button data-act="dot">.</button>
+                <button class="eq" data-act="eq">=</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===== PROJECT: CHATBOT ===== -->
+      <section id="view-chatbot" class="view">
+        <div class="project-page">
+          <button class="back-btn" data-view="home">← Kembali</button>
+          <div class="project-title">
+            <div class="icon">💬</div>
+            <h2>Chat Bot Simple</h2>
+          </div>
+          <p class="project-desc">Bot ini membalas berdasarkan kata kunci yang dikenali. Coba sapa dulu!</p>
+
+          <div class="panel">
+            <div class="chat-wrap">
+              <div class="chat-window" id="chatWindow"></div>
+              <div class="chips">
+                <button class="chip" data-msg="Halo!">Halo!</button>
+                <button class="chip" data-msg="Siapa Irzy?">Siapa Irzy?</button>
+                <button class="chip" data-msg="Kasih lelucon dong">Kasih lelucon dong</button>
+                <button class="chip" data-msg="Jam berapa sekarang?">Jam berapa sekarang?</button>
+              </div>
+              <div class="chat-input-row">
+                <input type="text" id="chatInput" placeholder="Tulis pesan..." autocomplete="off">
+                <button id="chatSend" aria-label="Kirim">➤</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===== PROJECT: MINIGAME ===== -->
+      <section id="view-game" class="view">
+        <div class="project-page">
+          <button class="back-btn" data-view="home">← Kembali</button>
+          <div class="project-title">
+            <div class="icon">🎮</div>
+            <h2>Minigame — Tic Tac Toe</h2>
+          </div>
+          <p class="project-desc">Kamu bermain sebagai X, komputer sebagai O. Coba kalahkan, atau seri saja sudah bagus!</p>
+
+          <div class="panel">
+            <div class="game-wrap">
+              <div class="game-status" id="gameStatus">Giliranmu (X)</div>
+              <div class="ttt-board" id="tttBoard"></div>
+              <button class="reset-btn" id="gameReset">Main Lagi</button>
+              <div class="game-note">Komputer berpikir cukup matang, jadi seri adalah hasil yang wajar 😉</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===== PROJECT: DATA ANALYST ===== -->
+      <section id="view-data" class="view">
+        <div class="project-page">
+          <button class="back-btn" data-view="home">← Kembali</button>
+          <div class="project-title">
+            <div class="icon">📊</div>
+            <h2>Data Analis Dasar</h2>
+          </div>
+          <p class="project-desc">Masukkan angka dipisah koma, lalu lihat statistik dan grafik batangnya.</p>
+
+          <div class="panel">
+            <div class="data-grid">
+              <div>
+                <label class="mono" style="font-size:12px;color:var(--slate-500);">Data (pisahkan dengan koma)</label>
+                <textarea id="dataInput">12,19,8,24,15,30,22,17,9,28</textarea>
+                <button class="analyze-btn" id="analyzeBtn">Analisis Data</button>
+              </div>
+
+              <div class="stat-row" id="statRow"></div>
+
+              <canvas id="dataChart" width="600" height="240"></canvas>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </main>
+
+    <footer>Dibuat dengan 💙 oleh Irzy</footer>
+  </div>
+
+  <!-- ============ CAT MASCOT ============ -->
+  <div class="cat-wrapper">
+    <div class="cat">
+      <div class="cat-tail"></div>
+      <div class="cat-body"></div>
+      <div class="cat-paw l"></div>
+      <div class="cat-paw r"></div>
+      <div class="cat-head">
+        <div class="cat-ear l"></div>
+        <div class="cat-ear r"></div>
+        <div class="cat-eye l"></div>
+        <div class="cat-eye r"></div>
+        <div class="cat-nose"></div>
+        <div class="cat-whisker l1"></div>
+        <div class="cat-whisker l2"></div>
+        <div class="cat-whisker r1"></div>
+        <div class="cat-whisker r2"></div>
+      </div>
+      <div class="cat-bubble" id="catBubble">Meow~</div>
+    </div>
+  </div>
+
+<script>
+  /* ================= SPLASH -> APP ================= */
+  document.getElementById('splash').addEventListener('click', function(){
+    var splash = document.getElementById('splash');
+    splash.classList.add('fade-out');
+    setTimeout(function(){
+      splash.style.display = 'none';
+      document.getElementById('app').classList.remove('hidden');
+    }, 550);
+  });
+
+  /* ================= VIEW NAVIGATION ================= */
+  function showView(id){
+    document.querySelectorAll('.view').forEach(function(v){ v.classList.remove('active'); });
+    document.getElementById(id).classList.add('active');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+  document.querySelectorAll('[data-view]').forEach(function(el){
+    el.addEventListener('click', function(){ showView(el.getAttribute('data-view')); });
+  });
+
+  /* ================= CAT — random meow bubble ================= */
+  (function(){
+    var bubble = document.getElementById('catBubble');
+    var phrases = ['Meow~', 'Halo!', 'Hai :)', 'Klik aku?'];
+    function pop(){
+      bubble.textContent = phrases[Math.floor(Math.random()*phrases.length)];
+      bubble.classList.add('show');
+      setTimeout(function(){ bubble.classList.remove('show'); }, 2200);
+    }
+    setInterval(pop, 7000);
+    setTimeout(pop, 2500);
+  })();
+
+  /* ================= CALCULATOR ================= */
+  (function(){
+    var prevEl = document.getElementById('calcPrev');
+    var currEl = document.getElementById('calcCurr');
+    var current = '0', previous = null, operator = null, waitingNew = false;
+
+    function updateScreen(){
+      currEl.textContent = current;
+      prevEl.textContent = (previous !== null && operator) ? (previous + ' ' + operator) : '\u00A0';
+    }
+
+    function inputDigit(d){
+      if(waitingNew){ current = d; waitingNew = false; }
+      else { current = (current === '0') ? d : current + d; }
+    }
+    function inputDot(){
+      if(waitingNew){ current = '0.'; waitingNew = false; return; }
+      if(current.indexOf('.') === -1) current += '.';
+    }
+    function toggleSign(){
+      current = (parseFloat(current) * -1).toString();
+    }
+    function toPercent(){
+      current = (parseFloat(current) / 100).toString();
+    }
+    function compute(a, b, op){
+      a = parseFloat(a); b = parseFloat(b);
+      switch(op){
+        case '+': return a + b;
+        case '−': return a - b;
+        case '×': return a * b;
+        case '÷': return b === 0 ? 0 : a / b;
+        default: return b;
+      }
+    }
+    function handleOperator(nextOp){
+      if(operator && waitingNew){ operator = nextOp; return; }
+      if(previous === null){ previous = current; }
+      else {
+        var result = compute(previous, current, operator);
+        previous = result.toString();
+        current = previous;
+      }
+      operator = nextOp;
+      waitingNew = true;
+    }
+    function handleEquals(){
+      if(operator === null || previous === null) return;
+      var result = compute(previous, current, operator);
+      current = (Math.round(result * 1e10) / 1e10).toString();
+      previous = null; operator = null; waitingNew = true;
+    }
+    function reset(){
+      current = '0'; previous = null; operator = null; waitingNew = false;
+    }
+
+    document.querySelectorAll('.calc-grid button').forEach(function(btn){
+      btn.addEventListener('click', function(){
+        if(btn.dataset.num !== undefined) inputDigit(btn.dataset.num);
+        else if(btn.dataset.op !== undefined) handleOperator(btn.dataset.op);
+        else if(btn.dataset.act === 'eq') handleEquals();
+        else if(btn.dataset.act === 'ac') reset();
+        else if(btn.dataset.act === 'dot') inputDot();
+        else if(btn.dataset.act === 'sign') toggleSign();
+        else if(btn.dataset.act === 'percent') toPercent();
+        updateScreen();
+      });
+    });
+    updateScreen();
+  })();
+
+  /* ================= CHATBOT ================= */
+  (function(){
+    var chatWindow = document.getElementById('chatWindow');
+    var input = document.getElementById('chatInput');
+    var sendBtn = document.getElementById('chatSend');
+
+    var jokes = [
+      'Kenapa komputer tidak pernah kedinginan? Karena dia punya banyak Windows!',
+      'Kenapa programmer suka alam? Karena banyak "tree" dan sedikit "bug".',
+      'Apa makanan favorit robot? Microchip... keripik mikro!'
+    ];
+    var fallback = [
+      'Menarik! Coba ceritakan lebih lanjut ya.',
+      'Hmm, aku belum begitu paham, tapi aku tetap dengarkan kok.',
+      'Bisa diulang dengan kata lain? Aku masih bot sederhana 😅'
+    ];
+
+    function addMessage(text, who){
+      var div = document.createElement('div');
+      div.className = 'msg ' + who;
+      div.textContent = text;
+      chatWindow.appendChild(div);
+      chatWindow.scrollTop = chatWindow.scrollHeight;
+    }
+
+    function showTyping(){
+      var div = document.createElement('div');
+      div.className = 'msg bot typing';
+      div.innerHTML = '<span></span><span></span><span></span>';
+      div.id = 'typingIndicator';
+      chatWindow.appendChild(div);
+      chatWindow.scrollTop = chatWindow.scrollHeight;
+    }
+    function hideTyping(){
+      var t = document.getElementById('typingIndicator');
+      if(t) t.remove();
+    }
+
+    function getReply(msgRaw){
+      var msg = msgRaw.toLowerCase();
+      if(/(halo|hai|hi|hey)/.test(msg)) return 'Hai juga! Senang kamu mampir ke portofolio Irzy 😊';
+      if(/(siapa irzy|tentang irzy|kenalan)/.test(msg)) return 'Irzy adalah pembuat website ini, sedang belajar membangun proyek-proyek kecil seperti aku!';
+      if(/(nama)/.test(msg)) return 'Aku cuma chatbot sederhana, belum punya nama keren. Panggil saja "Bot" ya!';
+      if(/(apa kabar|gimana kabar)/.test(msg)) return 'Aku baik-baik saja, terima kasih sudah bertanya! Kamu sendiri gimana?';
+      if(/(bisa apa|fitur|kemampuan)/.test(msg)) return 'Aku bisa menyapa, bercanda, dan menjawab beberapa pertanyaan sederhana lewat pola kata kunci.';
+      if(/(terima kasih|makasih|thanks)/.test(msg)) return 'Sama-sama! Senang bisa membantu 💙';
+      if(/(jam|waktu|pukul)/.test(msg)){
+        var now = new Date();
+        return 'Sekarang sekitar pukul ' + now.getHours() + ':' + String(now.getMinutes()).padStart(2,'0') + ' di perangkatmu.';
+      }
+      if(/(lucu|lelucon|jokes|candaan)/.test(msg)) return jokes[Math.floor(Math.random()*jokes.length)];
+      if(/(bye|dadah|selesai|sampai jumpa)/.test(msg)) return 'Sampai jumpa! Terima kasih sudah mengobrol denganku 👋';
+      return fallback[Math.floor(Math.random()*fallback.length)];
+    }
+
+    function sendMessage(text){
+      text = text.trim();
+      if(!text) return;
+      addMessage(text, 'user');
+      input.value = '';
+      showTyping();
+      setTimeout(function(){
+        hideTyping();
+        addMessage(getReply(text), 'bot');
+      }, 500 + Math.random()*400);
+    }
+
+    sendBtn.addEventListener('click', function(){ sendMessage(input.value); });
+    input.addEventListener('keydown', function(e){ if(e.key === 'Enter') sendMessage(input.value); });
+    document.querySelectorAll('.chip').forEach(function(chip){
+      chip.addEventListener('click', function(){ sendMessage(chip.dataset.msg); });
+    });
+
+    addMessage('Hai! Aku bot sederhana di portofolio Irzy. Coba sapa aku, tanya siapa Irzy, atau minta lelucon 😄', 'bot');
+  })();
+
+  /* ================= MINIGAME: TIC TAC TOE ================= */
+  (function(){
+    var boardEl = document.getElementById('tttBoard');
+    var statusEl = document.getElementById('gameStatus');
+    var resetBtn = document.getElementById('gameReset');
+    var board, gameOver;
+    var lines = [[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]];
+
+    function checkWin(b, p){
+      return lines.some(function(line){ return line.every(function(i){ return b[i] === p; }); });
+    }
+    function emptyIndices(b){
+      var arr = [];
+      b.forEach(function(v,i){ if(v === null) arr.push(i); });
+      return arr;
+    }
+    function minimax(b, isMax){
+      if(checkWin(b,'O')) return { score: 10 };
+      if(checkWin(b,'X')) return { score: -10 };
+      if(emptyIndices(b).length === 0) return { score: 0 };
+
+      var moves = [];
+      emptyIndices(b).forEach(function(idx){
+        var nb = b.slice();
+        nb[idx] = isMax ? 'O' : 'X';
+        var result = minimax(nb, !isMax);
+        moves.push({ index: idx, score: result.score });
+      });
+
+      var best;
+      if(isMax){
+        var bestScore = -Infinity;
+        moves.forEach(function(m){ if(m.score > bestScore){ bestScore = m.score; best = m; } });
+      } else {
+        var bestScore2 = Infinity;
+        moves.forEach(function(m){ if(m.score < bestScore2){ bestScore2 = m.score; best = m; } });
+      }
+      return best;
+    }
+
+    function render(){
+      boardEl.innerHTML = '';
+      board.forEach(function(val, i){
+        var btn = document.createElement('button');
+        btn.className = 'ttt-cell' + (val === 'O' ? ' o' : '');
+        btn.textContent = val || '';
+        btn.disabled = !!val || gameOver;
+        btn.addEventListener('click', function(){ playerMove(i); });
+        boardEl.appendChild(btn);
+      });
+    }
+
+    function endCheck(){
+      if(checkWin(board,'X')){ statusEl.textContent = 'Kamu menang! 🎉'; gameOver = true; return true; }
+      if(checkWin(board,'O')){ statusEl.textContent = 'Komputer menang. Coba lagi!'; gameOver = true; return true; }
+      if(emptyIndices(board).length === 0){ statusEl.textContent = 'Seri! Hasil yang bagus 👍'; gameOver = true; return true; }
+      return false;
+    }
+
+    function playerMove(i){
+      if(gameOver || board[i]) return;
+      board[i] = 'X';
+      render();
+      if(endCheck()) return;
+      statusEl.textContent = 'Komputer berpikir...';
+      setTimeout(function(){
+        var move = minimax(board.slice(), true);
+        if(move) board[move.index] = 'O';
+        render();
+        if(!endCheck()) statusEl.textContent = 'Giliranmu (X)';
+      }, 380);
+    }
+
+    function newGame(){
+      board = Array(9).fill(null);
+      gameOver = false;
+      statusEl.textContent = 'Giliranmu (X)';
+      render();
+    }
+
+    resetBtn.addEventListener('click', newGame);
+    newGame();
+  })();
+
+  /* ================= DATA ANALYST DASAR ================= */
+  (function(){
+    var input = document.getElementById('dataInput');
+    var btn = document.getElementById('analyzeBtn');
+    var statRow = document.getElementById('statRow');
+    var canvas = document.getElementById('dataChart');
+    var ctx = canvas.getContext('2d');
+
+    function mean(arr){ return arr.reduce(function(a,b){ return a+b; }, 0) / arr.length; }
+    function median(arr){
+      var s = arr.slice().sort(function(a,b){ return a-b; });
+      var mid = Math.floor(s.length/2);
+      return s.length % 2 !== 0 ? s[mid] : (s[mid-1] + s[mid]) / 2;
+    }
+    function stdDev(arr){
+      var m = mean(arr);
+      return Math.sqrt(arr.reduce(function(sum,v){ return sum + Math.pow(v-m,2); }, 0) / arr.length);
+    }
+    function round(n){ return Math.round(n * 100) / 100; }
+
+    function renderStats(values){
+      var stats = [
+        { l:'Jumlah Data', v: values.length },
+        { l:'Total', v: round(values.reduce(function(a,b){return a+b;},0)) },
+        { l:'Rata-rata', v: round(mean(values)) },
+        { l:'Median', v: round(median(values)) },
+        { l:'Minimum', v: round(Math.min.apply(null, values)) },
+        { l:'Maksimum', v: round(Math.max.apply(null, values)) },
+        { l:'Std. Deviasi', v: round(stdDev(values)) }
+      ];
+      statRow.innerHTML = '';
+      stats.forEach(function(s){
+        var box = document.createElement('div');
+        box.className = 'stat-box';
+        box.innerHTML = '<div class="v mono">' + s.v + '</div><div class="l">' + s.l + '</div>';
+        statRow.appendChild(box);
+      });
+    }
+
+    function drawChart(values){
+      var parent = canvas.parentElement;
+      canvas.width = parent.clientWidth;
+      canvas.height = 240;
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      var padding = 28;
+      var max = Math.max.apply(null, values) || 1;
+      var chartH = canvas.height - padding*2;
+      var chartW = canvas.width - padding*2;
+      var gap = chartW / values.length;
+      var barWidth = Math.min(gap * 0.55, 48);
+
+      ctx.strokeStyle = '#DBEAFE';
+      ctx.beginPath();
+      ctx.moveTo(padding, canvas.height - padding);
+      ctx.lineTo(canvas.width - padding, canvas.height - padding);
+      ctx.stroke();
+
+      values.forEach(function(v, i){
+        var barH = (v / max) * chartH;
+        var x = padding + i*gap + (gap - barWidth)/2;
+        var y = canvas.height - padding - barH;
+        ctx.fillStyle = '#2563EB';
+        ctx.fillRect(x, y, barWidth, barH);
+        ctx.fillStyle = '#1E3A8A';
+        ctx.font = '11px Inter, sans-serif';
+        ctx.textAlign = 'center';
+        ctx.fillText(v, x + barWidth/2, y - 6);
+      });
+    }
+
+    function analyze(){
+      var raw = input.value.split(',').map(function(s){ return parseFloat(s.trim()); }).filter(function(n){ return !isNaN(n); });
+      if(raw.length === 0){
+        statRow.innerHTML = '<div class="stat-box"><div class="l">Masukkan angka valid dipisah koma</div></div>';
+        ctx.clearRect(0,0,canvas.width,canvas.height);
+        return;
+      }
+      renderStats(raw);
+      drawChart(raw);
+    }
+
+    btn.addEventListener('click', analyze);
+    window.addEventListener('resize', function(){
+      if(document.getElementById('view-data').classList.contains('active')) analyze();
+    });
+    analyze();
+  })();
+</script>
 </body>
-
-
 </html>
