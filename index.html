@@ -1,36 +1,177 @@
 <!DOCTYPE html>
-<html lang="id"
+<html>
+
 <head>
-  <meta charset="UTF-8">
-  <meta name"viewport" content="width=device-width, initial-scale=1.0"
-  <title>Portofolio Saya</title>
-  <link rel="stylesheet" href="style.css">
+
+<title>Portfolio Irzy</title>
+
+<link rel="stylesheet" href="style.css">
+
 </head>
+
+
 <body>
-  <header>
-    <h1>Halo, Saya Irzy</h1>
-    <p>Seorang Pelajar 15 tahun</p>
-  </header>
-  
-  <section id="tentang">
-    <h2>Tentang</h2>
-    <p>saya tertarik dengan teknologi informasi</p>
-  </section>
-  
-  <section id="keahlian">
-    <h2>Keahlian saya</h2>
-    <ul>
-      <li>HTML & CSS Dasar</li>
-      <li>Python dasar</li>
-      <li>Operasi termux dasar</li>
-    </ul>
-  </section>
-  
-  <footer>
-    <h2>Hubungi saya</h2>
-    <p>Email: IrzyFadil@gmail.com</p>
-    <p>Instagram: @zyy.wjust</p>
-    <p>No. Whatsapp: +6288286337267</p>
-  </footer>
+
+
+<div class="background"></div>
+
+
+<!-- HALAMAN AWAL -->
+
+<section id="welcome">
+
+<h1>Selamat Datang</h1>
+
+<h2>Ke Portfolio Irzy</h2>
+
+<p>
+Future Programmer | AI Enthusiast | Technology Explorer
+</p>
+
+
+<button onclick="masuk()">
+Ketuk Untuk Masuk
+</button>
+
+
+</section>
+
+
+
+<!-- MENU UTAMA -->
+
+<section id="menu" class="hidden">
+
+
+<h1>Portfolio Irzy</h1>
+
+
+<div class="box" onclick="showProject()">
+
+<h2>Project Saya</h2>
+
+<p>
+Lihat karya dan eksperimen programming saya
+</p>
+
+</div>
+
+
+
+</section>
+
+
+
+
+
+<!-- PROJECT -->
+
+<section id="project" class="hidden">
+
+
+<h1>Project Programming</h1>
+
+
+<div class="card">
+
+<h2>Kalkulator Sederhana</h2>
+
+<input id="angka1" placeholder="Angka 1">
+
+<input id="angka2" placeholder="Angka 2">
+
+
+<button onclick="hitung()">
+Tambah
+</button>
+
+
+<p id="hasil"></p>
+
+</div>
+
+
+
+
+<div class="card">
+
+<h2>Chat Bot Simple</h2>
+
+<input id="chat" placeholder="Tanya sesuatu">
+
+
+<button onclick="bot()">
+Kirim
+</button>
+
+
+<p id="jawaban"></p>
+
+</div>
+
+
+
+
+
+
+<div class="card">
+
+<h2>Mini Game</h2>
+
+<p>
+Tebak angka 1-10
+</p>
+
+<input id="tebakan">
+
+
+<button onclick="game()">
+Main
+</button>
+
+
+<p id="score"></p>
+
+</div>
+
+
+
+
+
+
+
+<div class="card">
+
+
+<h2>Data Analis Dasar</h2>
+
+
+<p>
+Jumlah data: 5,10,15,20
+</p>
+
+
+<button onclick="analisis()">
+Analisis
+</button>
+
+
+<p id="data"></p>
+
+
+
+</div>
+
+
+
+</section>
+
+
+
+<script src="script.js"></script>
+
+
 </body>
+
+
 </html>
